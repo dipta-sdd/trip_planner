@@ -10,4 +10,10 @@ export default defineNuxtConfig({
       tailwindcss(),
     ],
   },
+  modules: [ '@nuxtjs/color-mode', 'nuxt-icon'],
+  colorMode: {
+    classSuffix: '',
+    preference: 'system',
+    fallback: 'light'
+  }
 })
