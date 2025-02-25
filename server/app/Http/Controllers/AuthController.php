@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
+
 /**
  * @OA\Tag(
  *     name="Authentication",
@@ -15,10 +16,16 @@ use App\Models\User;
  */
 class AuthController extends Controller
 {
-    public function __construct()
+    protected function respondWithToken($token)
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $user = $this->guard()->user();
+        return response()->json([
+            'user' => $user,
+            'access_token' => $token,
+            'token_type' => 'bearer'
+        ]);
     }
+    
 
     /**
      * @OA\Post(
@@ -48,10 +55,11 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
+            'password' => 'required|string|min:6|confirmed',
         ]);
 
         $user = User::create([
@@ -61,15 +69,7 @@ class AuthController extends Controller
         ]);
 
         $token = Auth::guard('api')->login($user);
-        return response()->json([
-            'status' => 'success',
-            'message' => 'User created successfully',
-            'user' => $user,
-            'authorisation' => [
-                'token' => $token,
-                'type' => 'bearer',
-            ]
-        ]);
+        return $this->respondWithToken($token);
     }
 
     /**
@@ -105,22 +105,14 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         $token = Auth::guard('api')->attempt($credentials);
+
         if (!$token) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Unauthorized',
             ], 401);
         }
-
-        $user = Auth::user();
-        return response()->json([
-            'status' => 'success',
-            'user' => $user,
-            'authorisation' => [
-                'token' => $token,
-                'type' => 'bearer',
-            ]
-        ]);
+        return $this->respondWithToken($token);
     }
 
     /**
@@ -148,32 +140,19 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * @OA\Post(
-     *     path="/refresh",
-     *     tags={"Authentication"},
-     *     summary="Refresh token",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Token refreshed successfully",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="string", example="success"),
-     *             @OA\Property(property="user", type="object"),
-     *             @OA\Property(property="authorisation", type="object")
-     *         )
-     *     )
-     * )
-     */
-    public function refresh()
+
+
+    public function me()
     {
-        return response()->json([
-            'status' => 'success',
-            'user' => Auth::user(),
-            'authorisation' => [
-                'token' => Auth::refresh(),
-                'type' => 'bearer',
-            ]
-        ]);
+
+        // dd('jkjjj');
+        $user = $this->guard()->user();
+        // dd($user);
+        // $user['token'] = $this->guard()->refresh();
+        return response()->json($user);
+    }
+    public function guard()
+    {
+        return Auth::guard('api');
     }
 }

@@ -12,6 +12,7 @@
             <label for="email" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-100">Email address</label>
             <div class="mt-2">
               <input
+                v-model="email"
                 id="email"
                 name="email"
                 type="email"
@@ -26,6 +27,7 @@
             <label for="password" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-100">Password</label>
             <div class="mt-2">
               <input
+                v-model="password"
                 id="password"
                 name="password"
                 type="password"
@@ -58,12 +60,34 @@
   
 
 <script setup>
+const token = useCookie('token');
+const userStore = useUserStore();
+const email = ref('');
+const password = ref('');
 const handleLogin = async (event) => {
-  const formData = new FormData(event.target);
-  const email = formData.get('email');
-  const password = formData.get('password');
   
-  // TODO: Implement login logic
-  console.log('Login attempt:', { email, password });
+  try {
+    const res = await fetch('http://localhost:8000/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email.value,
+        password: password.value
+      }),
+    });
+    const data = await res.json();
+    userStore.setUser({...data.user, token: data.access_token});
+    token.value = data.access_token;
+    token.options = {
+      maxAge: 60 * 60 * 24 * 30, // Cookie expires in 30 days
+      path: '/'
+    };
+    navigateTo('/');
+    console.log('login successful');
+  } catch (error) {
+    console.log(error);
+  }
 }
 </script>

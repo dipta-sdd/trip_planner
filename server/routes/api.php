@@ -10,11 +10,12 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::post('register', 'register');
     Route::post('logout', 'logout');
-    Route::post('refresh', 'refresh');
 });
 
 // Protected routes
 Route::middleware('auth:api')->group(function () {
+
+    Route::get('me', [AuthController::class, 'me']);
     // Trip routes
     Route::apiResource('trips', TripController::class);
     

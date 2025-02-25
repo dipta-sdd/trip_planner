@@ -12,7 +12,7 @@ export default defineNuxtConfig({
     ],
   },
 
-  modules: ['@nuxtjs/color-mode'],
+  modules: ['@nuxtjs/color-mode', '@pinia/nuxt'],
   colorMode: {
     preference: 'light', // Default theme preference (light or dark)
     classSuffix: '', // (Optional) You can use a suffix for class names if needed

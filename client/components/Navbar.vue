@@ -14,13 +14,20 @@
             <NuxtLink to="/" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
               Home
             </NuxtLink>
-            <NuxtLink to="/login" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
-              Login
-            </NuxtLink>
-            <NuxtLink to="/signup" class="bg-indigo-600 dark:bg-indigo-600 text-white hover:bg-indigo-700 dark:hover:bg-indigo-700 px-4 py-2 rounded-md text-sm font-medium">
-              Sign Up
-            </NuxtLink>
-  
+
+            
+
+            <div v-if="userStore.user">
+              <NuxtLink to="/profile" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
+                Profile
+              </NuxtLink>
+            </div>
+
+            <div v-else>
+              <NuxtLink to="/login" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
+                Login
+              </NuxtLink>
+            </div>
             <!-- Theme Toggle Button -->
             <ThemeToggle />
           </div>
@@ -28,5 +35,9 @@
       </div>
     </nav>
   </template>
+
+  <script setup>
+    const userStore = useUserStore();
+  </script>
   
   
