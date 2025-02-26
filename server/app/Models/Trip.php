@@ -41,10 +41,4 @@ class Trip extends Model
         return $this->hasMany(Activity::class);
     }
 
-    public function participants(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'trip_participants')
-            ->withPivot(['role', 'status', 'can_edit'])
-            ->withTimestamps();
-    }
 } 

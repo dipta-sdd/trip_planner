@@ -14,8 +14,9 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('location')->nullable();
-            $table->datetime('start_time');
-            $table->datetime('end_time');
+            $table->time('start_time');
+            $table->time('end_time');
+            $table->date('date');
             $table->string('type')->default('activity'); // activity, transportation, accommodation
             $table->decimal('cost', 10, 2)->nullable();
             $table->json('details')->nullable(); // Additional details specific to the activity type

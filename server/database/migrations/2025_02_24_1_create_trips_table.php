@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('end_date');
             $table->decimal('budget', 10, 2)->nullable();
             $table->string('status')->default('planning'); // planning, ongoing, completed, cancelled
-            $table->boolean('is_public')->default(false);
+            $table->boolean('is_public')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });

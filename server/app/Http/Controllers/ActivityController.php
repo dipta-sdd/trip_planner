@@ -4,98 +4,113 @@ namespace App\Http\Controllers;
 
 use App\Models\Trip;
 use App\Models\Activity;
+use App\Models\Participant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Exception;
 
 class ActivityController extends Controller
 {
-    public function index(Trip $trip)
-    {
-        $this->authorize('view', $trip);
+    public function store(Request $req , $trip){
+        try {
+        $user = Auth::guard('api')->user();
+        $permission = Participant::where('trip_id', $trip)->where('user_id', $user->id)->where('can_edit', true)->exists();
+
         
-        $activities = $trip->activities()
-            ->orderBy('start_time')
-            ->get();
-            
-        return response()->json($activities);
-    }
-
-    public function store(Request $request, Trip $trip)
-    {
-        $this->authorize('update', $trip);
-
-        $validated = $request->validate([
+        if (!$permission) {
+            return response()->json([
+                'message' => 'You do not have permission to add an activity to this trip'
+            ], 403);
+        }
+        $data = $req->validate([
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'location' => 'nullable|string',
-            'start_time' => 'required|date',
-            'end_time' => 'required|date|after:start_time',
-            'type' => 'required|in:activity,transportation,accommodation',
-            'cost' => 'nullable|numeric|min:0',
-            'details' => 'nullable|json',
+            'description' => 'required|string',
+            'location' => 'required|string|max:255',
+            'start_time' => 'required',
+            'end_time' => 'required||after:start_time',
+            'date' => 'required|date',
+            'type' => 'required|string|max:100',
+            'cost' => 'nullable|numeric|min:0'
+        ]);
+        $activity = Activity::create([
+            'trip_id' => $trip,
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'location' => $data['location'],
+            'start_time' => $data['start_time'],
+            'end_time' => $data['end_time'],
+            'date' => $data['date'],
+            'type' => $data['type'],
+            'cost' => $data['cost'],
         ]);
 
-        $activity = $trip->activities()->create($validated);
-
-        return response()->json($activity, 201);
-    }
-
-    public function show(Trip $trip, Activity $activity)
-    {
-        $this->authorize('view', $trip);
+        return response()->json([
+            'message' => 'Activity created successfully',
+            'activity' => $activity
+            
+        ], 201);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
         
-        if ($activity->trip_id !== $trip->id) {
-            return response()->json(['message' => 'Activity does not belong to this trip'], 404);
-        }
-
-        return response()->json($activity);
     }
 
-    public function update(Request $request, Trip $trip, Activity $activity)
-    {
-        $this->authorize('update', $trip);
+    public function update(Request $req, $trip, $activity){
+        try {
+            $user = Auth::guard('api')->user();
+            $permission = Participant::where('trip_id', $trip)->where('user_id', $user->id)->where('can_edit', true)->exists();
 
-        if ($activity->trip_id !== $trip->id) {
-            return response()->json(['message' => 'Activity does not belong to this trip'], 404);
+            if (!$permission) {
+                return response()->json([
+                    'message' => 'You do not have permission to update this activity'
+                ], 403);
+            }
+
+            $data = $req->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'required|string',
+                'location' => 'required|string|max:255',
+                'start_time' => 'required',
+                'end_time' => 'required|after:start_time',
+                'date' => 'required|date',
+                'type' => 'required|string|max:100',
+                'cost' => 'nullable|numeric|min:0'
+            ]);
+
+            $activity = Activity::findOrFail($activity);
+            $activity->update($data);
+
+            return response()->json([
+                'message' => 'Activity updated successfully',
+                'activity' => $activity
+            ], 200);
+        } catch (exception $e) {
+            return response()->json([
+                'message' =>  $e->getMessage()
+            ], 500);
         }
-
-        $validated = $request->validate([
-            'title' => 'string|max:255',
-            'description' => 'nullable|string',
-            'location' => 'nullable|string',
-            'start_time' => 'date',
-            'end_time' => 'date|after:start_time',
-            'type' => 'in:activity,transportation,accommodation',
-            'cost' => 'nullable|numeric|min:0',
-            'details' => 'nullable|json',
-        ]);
-
-        $activity->update($validated);
-
-        return response()->json($activity);
     }
+    public function destroy($trip, $activity){
+        try {
+            $user = Auth::guard('api')->user();
+            $permission = Participant::where('trip_id', $trip)->where('user_id', $user->id)->where('can_edit', true)->exists();
 
-    public function destroy(Trip $trip, Activity $activity)
-    {
-        $this->authorize('update', $trip);
-
-        if ($activity->trip_id !== $trip->id) {
-            return response()->json(['message' => 'Activity does not belong to this trip'], 404);
+            if (!$permission) {
+                return response()->json([
+                    'message' => 'You do not have permission to delete this activity'
+                ], 403);
+            }
+            $activity = Activity::findOrFail($activity);
+            $activity->delete();
+            return response()->json([
+                'message' => 'Activity deleted successfully'
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
         }
-
-        $activity->delete();
-
-        return response()->json(null, 204);
-    }
-
-    public function getTypeSpecificDetails(Trip $trip, Activity $activity)
-    {
-        $this->authorize('view', $trip);
-
-        if ($activity->trip_id !== $trip->id) {
-            return response()->json(['message' => 'Activity does not belong to this trip'], 404);
-        }
-
-        return response()->json($activity->getTypeSpecificDetails());
     }
 } 

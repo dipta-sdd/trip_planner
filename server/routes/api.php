@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\SponsorController;
 
 // Auth routes
 Route::controller(AuthController::class)->group(function () {
@@ -12,19 +13,24 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('logout', 'logout');
 });
 
+    Route::get('trips/{id}', [TripController::class, 'read']);
 // Protected routes
 Route::middleware('auth:api')->group(function () {
 
     Route::get('me', [AuthController::class, 'me']);
-    // Trip routes
-    Route::apiResource('trips', TripController::class);
+
+
     
     // Trip participant management
-    Route::post('trips/{trip}/participants', [TripController::class, 'addParticipant']);
-    Route::put('trips/{trip}/participants/{participant}', [TripController::class, 'updateParticipant']);
-    Route::delete('trips/{trip}/participants/{participant}', [TripController::class, 'removeParticipant']);
+
+    Route::post('trips', [TripController::class, 'store']);
+    Route::post('trips/{trip}/activity', [ActivityController::class, 'store']);
+    Route::post('trips/{trip}/activity/{activity}', [ActivityController::class, 'update']);
+    Route::delete('trips/{trip}/activity/{activity}', [ActivityController::class, 'destroy']);
+
+    // sponsors
+    Route::post('trips/{trip}/sponsor', [SponsorController::class, 'store']);
+    Route::delete('trips/{trip}/sponsor/{sponsor}', [SponsorController::class, 'destroy']);
+    Route::post('trips/{trip}/sponsor/{sponsor}', [SponsorController::class, 'update']);
     
-    // Trip activity management
-    Route::apiResource('trips.activities', ActivityController::class)->shallow();
-    Route::get('trips/{trip}/activities/{activity}/details', [ActivityController::class, 'getTypeSpecificDetails']);
 });

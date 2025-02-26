@@ -4,20 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Trip;
 use App\Models\User;
+use App\Models\Participant;
+use App\Models\Activity;
+use App\Models\Sponsor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TripController extends Controller
 {
-    public function index()
-    {
-        $user = Auth::user();
-        $trips = $user->getAllTrips()->with(['owner', 'participants'])->get();
-        
-        return response()->json($trips);
-    }
-
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -28,105 +23,54 @@ class TripController extends Controller
             'budget' => 'nullable|numeric|min:0',
             'is_public' => 'boolean',
         ]);
-
-        $trip = Auth::user()->ownedTrips()->create($validated);
-
+        $user = Auth::guard('api')->user();
+        $trip = Trip::create([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
+            'budget' => $validated['budget'],
+            'is_public' => $validated['is_public'],
+            'user_id' => $user->id,]);
+        
+        try {
+            $participant = Participant::create([
+                'trip_id' => $trip->id,
+                'user_id' => $user->id,
+                'role' => 'owner',
+                'status' => 'accepted',
+                'can_edit' => true,
+            ]);
+            $trip->participant = $participant; 
+        } catch (\Exception $e) {
+            return response()->json($e, 500);
+        }
         // Add the creator as a participant with owner role
-        $trip->participants()->attach(Auth::id(), [
-            'role' => 'owner',
-            'status' => 'accepted',
-            'can_edit' => true,
-        ]);
-
-        return response()->json($trip->load(['owner', 'participants']), 201);
-    }
-
-    public function show(Trip $trip)
-    {
-        $this->authorize('view', $trip);
         
-        return response()->json($trip->load(['owner', 'participants', 'activities']));
+        $trip->can_edit = true;
+        // dd(json_encode($user));
+        return response()->json($trip, 201);
     }
 
-    public function update(Request $request, Trip $trip)
-    {
-        $this->authorize('update', $trip);
+    public function read(Request $request, $id){
+        $trip = Trip::with(['owner', 'activities'])->findOrFail($id);
+        $participants = Participant::selectRaw('participants.*, users.name as name, users.email as email')
+        ->join('users', 'participants.user_id', '=', 'users.id')->where('trip_id', $id)->get();
+        $trip->participants = $participants;
 
-        $validated = $request->validate([
-            'title' => 'string|max:255',
-            'description' => 'nullable|string',
-            'start_date' => 'date',
-            'end_date' => 'date|after_or_equal:start_date',
-            'budget' => 'nullable|numeric|min:0',
-            'is_public' => 'boolean',
-            'status' => 'in:planning,ongoing,completed,cancelled',
-        ]);
+        $sponsors = Sponsor::where('trip_id', $id)->get();
+        $trip->sponsors = $sponsors;
 
-        $trip->update($validated);
-
-        return response()->json($trip->load(['owner', 'participants']));
-    }
-
-    public function destroy(Trip $trip)
-    {
-        $this->authorize('delete', $trip);
+        $activities = Activity::where('trip_id', $id)->get();
+        $trip->activities = $activities;
         
-        $trip->delete();
-        
-        return response()->json(null, 204);
-    }
-
-    public function addParticipant(Request $request, Trip $trip)
-    {
-        $this->authorize('update', $trip);
-
-        $validated = $request->validate([
-            'email' => 'required|email|exists:users,email',
-            'can_edit' => 'boolean',
-        ]);
-
-        $user = User::where('email', $validated['email'])->first();
-
-        // Check if user is already a participant
-        if ($trip->participants()->where('users.id', $user->id)->exists()) {
-            return response()->json(['message' => 'User is already a participant'], 422);
+        try {
+            $user = Auth::guard('api')->user();
+            $trip->can_edit = Participant::where('user_id', $user->id)->where('trip_id', $id)->first()->can_edit;
+        } catch (\Exception $e) {
+            $trip->can_edit = false;
         }
-
-        $trip->participants()->attach($user->id, [
-            'role' => 'participant',
-            'status' => 'pending',
-            'can_edit' => $validated['can_edit'] ?? false,
-        ]);
-
-        // TODO: Send invitation email to user
-
-        return response()->json($trip->load(['owner', 'participants']));
+        return response()->json($trip);
     }
 
-    public function updateParticipant(Request $request, Trip $trip, User $participant)
-    {
-        $this->authorize('update', $trip);
-
-        $validated = $request->validate([
-            'can_edit' => 'boolean',
-            'status' => 'in:accepted,declined',
-        ]);
-
-        $trip->participants()->updateExistingPivot($participant->id, $validated);
-
-        return response()->json($trip->load(['owner', 'participants']));
-    }
-
-    public function removeParticipant(Trip $trip, User $participant)
-    {
-        $this->authorize('update', $trip);
-
-        if ($trip->user_id === $participant->id) {
-            return response()->json(['message' => 'Cannot remove trip owner'], 422);
-        }
-
-        $trip->participants()->detach($participant->id);
-
-        return response()->json($trip->load(['owner', 'participants']));
-    }
 } 
