@@ -32,7 +32,7 @@
                     </button>
                 </div>
                 <div v-if="!sponsors?.length">
-                    <p class="text-sm  text-red-400">No sponsors yet.</p>
+                    <p class="text-sm px-4 py-4 text-center text-gray-500">No sponsors yet.</p>
                 </div>
 
             </div>

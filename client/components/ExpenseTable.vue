@@ -4,6 +4,7 @@
             <thead class="bg-gray-50">
                 <tr>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Added By</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Note</th>
                     <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Amount</th>
@@ -14,6 +15,9 @@
                 <tr v-for="expense in expenses" :key="expense.id">
                     <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
                         {{ formatDate(expense.date) }}
+                    </td>
+                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ expense.name }}
                     </td>
                     <td class="px-4 py-4 whitespace-nowrap">
                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
@@ -46,7 +50,7 @@
             </tbody>
             <tfoot class="bg-gray-50">
                 <tr>
-                    <td colspan="3" class="px-4 py-3 text-right text-sm font-medium">Total</td>
+                    <td colspan="4" class="px-4 py-3 text-right text-sm font-medium">Total</td>
                     <td class="px-4 py-3 text-right text-sm font-medium">
                         {{ formatCurrency(totalExpenses) }}
                     </td>

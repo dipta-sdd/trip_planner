@@ -1,11 +1,6 @@
 <template>
-  <div class="bg-gray-100 p-8 capitalize">
-
-
-
-
-
-
+  <TripSkeleton v-if="loading" />
+  <div v-else class="bg-gray-100 p-8 capitalize">
     <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
       <!-- Trip Title -->
       <div class="flex justify-between items-center mb-4">
@@ -13,6 +8,13 @@
         <!-- Edit Button (Admin Only) -->
         <button v-if="isAdmin" class="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600">
           Edit Trip
+        </button>
+        <span v-else-if="trip.participant_status" class="text-sm px-3 py-1.5 rounded-md"
+          :class="trip.participant_status === 'pending' ? 'bg-blue-200 text-blue-950' : trip.participant_status === 'accepted' ? 'bg-green-200 text-green-950' : 'bg-red-200 text-red-950'">
+          {{ trip.participant_status === 'accepted' ? 'Joined' : trip.participant_status }}
+        </span>
+        <button v-else class="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600" @click="joinTrip">
+          Join
         </button>
       </div>
 
@@ -31,8 +33,8 @@
           <h3 class="text-sm font-semibold text-gray-500">Start Date</h3>
           <p class="text-gray-800">{{ new Date(trip?.start_date).toLocaleDateString('en-US', {
             year: 'numeric', month:
-            'long', day: 'numeric'
-            }) }}</p>
+              'long', day: 'numeric'
+          }) }}</p>
         </div>
 
         <!-- End Date -->
@@ -40,8 +42,8 @@
           <h3 class="text-sm font-semibold text-gray-500">End Date</h3>
           <p class="text-gray-800">{{ new Date(trip?.end_date).toLocaleDateString('en-US', {
             year: 'numeric', month:
-            'long', day: 'numeric'
-            }) }}</p>
+              'long', day: 'numeric'
+          }) }}</p>
         </div>
 
         <!-- Status -->
@@ -63,7 +65,7 @@
         </div> -->
       </div>
 
-      <Participants :isAdmin="isAdmin? true : false" :participants="trip?.participants" :tripId="trip?.id" />
+      <Participants :isAdmin="isAdmin ? true : false" :participants="trip?.participants" :tripId="trip?.id" />
       <Sponsors :isAdmin="isAdmin ? true : false" :sponsors="trip?.sponsors" :tripId="trip?.id"
         @addSponsor="(data) => trip.sponsors.push(data)"
         @editSponsor="(data) => trip.sponsors = trip.sponsors.map(sponsor => sponsor.id === data.id ? data : sponsor)"
@@ -71,7 +73,7 @@
 
 
 
-      <!-- Combined Itinerary and Activities Section -->
+      <!--  Itinerary and Activities Section -->
       <div class="mb-8">
         <div class="flex justify-between items-center mb-4">
           <h2 class="text-2xl font-bold text-gray-800">Itinerary & Activities</h2>
@@ -83,11 +85,11 @@
         </div>
         <div class="space-y-6">
           <div class="bg-gray-50 p-3 rounded-lg">
-            <div v-for="date in dataComputed || []" :key="date">
+            <div v-if="dataComputed" v-for="date in dataComputed || []" :key="date">
               <h3 class="text-xl font-semibold text-gray-800 my-2">{{ new
                 Date(date.date).toLocaleDateString('en-US', {
-                year: 'numeric', month: 'short', day:
-                'numeric'
+                  year: 'numeric', month: 'short', day:
+                    'numeric'
                 }) }}</h3>
               <div class="space-y-4">
                 <div v-for="activity in date.activities || []" :key="activity.id"
@@ -104,8 +106,8 @@
                     <span :class="{
                       'bg-red-100 text-red-800': activity.type === 'accommodation',
                       'bg-blue-100 text-blue-800': activity.type === 'food',
-                      'bg-yellow-100 text-yellow-800': activity.type === 'tour',
-                      'bg-green-100 text-green-800': activity.type === 'meeting',
+                      'bg-yellow-100 text-yellow-800': activity.type === 'transportation',
+                      'bg-green-100 text-green-800': activity.type === 'activity',
                     }" class="px-3 py-1 text-sm font-semibold rounded-full">{{ activity.type }}</span>
                   </div>
                   <div class="text-sm text-gray-600">
@@ -115,7 +117,9 @@
                 </div>
               </div>
             </div>
-
+            <div v-else>
+              <p class="text-sm px-4 py-4 text-center text-gray-500">No activities yet.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -151,25 +155,18 @@
 
       <!-- Detailed Expenses Section (Admin Only) -->
       <div v-if="isAdmin" id="detailed-expenses">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Detailed Expenses</h2>
-        <div class="bg-gray-50 p-3 rounded-lg">
-          <div class="space-y-4">
-            <!-- Expense 1 -->
-            <div class="bg-white p-4 rounded-lg shadow-sm">
-              <div class="flex justify-between items-center mb-2">
-                <h3 class="text-md font-semibold text-gray-800">Lunch at Mountain View Restaurant</h3>
-                <span class="px-3 py-1 text-sm font-semibold bg-green-100 text-green-800 rounded-full">Food</span>
-              </div>
-              <div class="text-sm text-gray-600">
-                <p><strong>Amount:</strong> $120</p>
-                <p><strong>Paid By:</strong> John Doe</p>
-                <p><strong>Description:</strong> Lunch for the group at a local restaurant.</p>
-              </div>
-            </div>
-          </div>
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-2xl font-bold text-gray-800">Detailed Expenses</h2>
+          <button @click="expenseModal = true" class="mb-4 bg-blue-600 text-white px-4 py-2 rounded-md">
+            Add Expense
+          </button>
+          <AddExpenseModal :trip-id="trip.id" v-if="expenseModal" @submit="handleExpenseSubmit"
+            @close="expenseModal = false" />
         </div>
+
+        <ExpenseTable :expenses="trip?.expenses" @edit="handleEdit" @delete="handleDelete" />
       </div>
-      <AddExpenseModal v-if="showModal" @submit="handleSubmit" @close="showModal = false" />
+
     </div>
     <!-- add activity  modal -->
     <div v-if="isModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -298,7 +295,9 @@ const route = useRoute()
 const trip = ref({})
 const activities = ref([])
 const isModalOpen = ref(false);
+const expenseModal = ref(false);
 const activityError = ref(null);
+const loading = ref(true);
 const activity = ref({
   title: '',
   description: '',
@@ -406,19 +405,24 @@ const clearActivity = () => {
   activityError.value = null;
 }
 onMounted(async () => {
-  const response = await fetch(`http://localhost:8000/api/trips/${route.params.id}`,
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${useCookie('token').value}`
+  try {
+    const data = await $fetch(`http://localhost:8000/api/trips/${route.params.id}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${useCookie('token').value}`
+        }
       }
-    }
-  )
-  const data = await response.json()
-  trip.value = data;
-  // isAdmin.value = data.can_edit;
+    )
+    trip.value = data;
+    activities.value = data?.activities;
+    loading.value = false;
 
-  activities.value = data.activities
+  } catch (error) {
+    return navigateTo('/trips');
+
+
+  }
 })
 
 const dataComputed = computed(() => {
@@ -443,4 +447,31 @@ const addSponsor = (data) => {
   console.log(data);
   trip.value.sponsors.push(data);
 }
+
+const handleExpenseSubmit = (data) => {
+  trip.value.expenses = data;
+  expenseModal.value = false;
+}
+
+const joinTrip = async () => {
+  if (!useUserStore().user) {
+    return navigateTo('/login');
+  }
+
+  try {
+    const data = await $fetch(`http://localhost:8000/api/trips/${trip.value.id}/join`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${useCookie('token').value}`
+      }
+    });
+    trip.value.participant_status = 'pending';
+
+  } catch (error) {
+    console.error('Join request failed:', error);
+  } finally {
+    trip.isJoining = false;
+  }
+};
 </script>

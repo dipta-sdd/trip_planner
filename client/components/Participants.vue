@@ -29,6 +29,9 @@
                         </div>
                     </div>
                 </div>
+                <div v-if="!participants?.length">
+                    <p class="text-sm px-4 py-2 text-center text-gray-500">No participants yet.</p>
+                </div>
             </div>
         </div>
     </div>

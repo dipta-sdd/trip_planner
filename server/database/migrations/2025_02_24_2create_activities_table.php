@@ -17,7 +17,7 @@ return new class extends Migration
             $table->time('start_time');
             $table->time('end_time');
             $table->date('date');
-            $table->string('type')->default('activity'); // activity, transportation, accommodation
+            $table->string('type')->default('activity'); // activity, transportation, accommodation, food
             $table->decimal('cost', 10, 2)->nullable();
             $table->json('details')->nullable(); // Additional details specific to the activity type
             $table->timestamps();
