@@ -11,15 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('accommodations', function (Blueprint $table) {
+        Schema::create('activities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('destination_id')->constrained('destinations')->onDelete('cascade');
             $table->string('name');
-            $table->dateTime('check_in')->nullable();
-            $table->dateTime('check_out')->nullable();
-            $table->string('address')->nullable();
-            $table->string('contact_info')->nullable();
-            $table->text('notes')->nullable();
+            $table->enum('type', [
+                'Sightseeing',
+                'Dining',
+                'Shopping',
+                'Entertainment',
+                'Sports',
+                'Relaxation',
+                'Cultural',
+                'Other'
+            ]);
+            $table->dateTime('start_time')->nullable();
+            $table->dateTime('end_time')->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('accommodations');
+        Schema::dropIfExists('activities');
     }
 };

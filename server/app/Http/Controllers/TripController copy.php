@@ -150,4 +150,25 @@ class TripController extends Controller
         $trip->participant = $participant; 
         return response()->json($trip, 201);
     }
+
+
+    public function update(Request $request, $id){
+        $trip = Trip::findOrFail($id);
+        $user = Auth::guard('api')->user();
+        if ($trip->user_id != $user->id) {
+            return response()->json(['error' => 'You do not have permission modify this trip.'], 403);
+        }
+        $trip->update($request->all());
+        return response()->json($trip, 200);
+    }
+    public function destroy($id){
+        $trip = Trip::findOrFail($id);
+        $user = Auth::guard('api')->user();
+        if ($trip->user_id != $user->id) {
+            return response()->json(['error' => 'You do not have permission modify this trip.'], 403);
+        }
+        $trip->delete();
+        return response()->json(['message' => 'Trip deleted successfully']);
+    }
+
 } 

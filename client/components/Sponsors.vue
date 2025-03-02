@@ -38,7 +38,7 @@
             </div>
         </div>
     </div>
-    <div v-if="isModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div v-if="isModalOpen" class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xs">
         <div class="bg-white dark:bg-gray-700 rounded-lg shadow-sm w-full max-w-2xl">
             <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-600">
                 <h3 class="text-xl font-semibold text-gray-900 dark:text-white">

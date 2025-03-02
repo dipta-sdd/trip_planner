@@ -2,35 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Activity extends Model
 {
-    use HasFactory, SoftDeletes;
-
     protected $fillable = [
-        'trip_id',
-        'title',
-        'description',
-        'location',
+        'destination_id',
+        'name',
+        'type',
         'start_time',
         'end_time',
-        'date',
-        'type',
-        'cost',
+        'description',
     ];
 
     protected $casts = [
-        'cost' => 'decimal:2',
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
     ];
 
-    public function trip(): BelongsTo
+    public function destination()
     {
-        return $this->belongsTo(Trip::class);
+        return $this->belongsTo(Destination::class);
     }
-
-
-} 
+}

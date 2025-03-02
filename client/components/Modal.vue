@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isOpen" class=" fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div v-if="isOpen" class=" fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xs">
         <div class="bg-white dark:bg-gray-700 rounded-lg shadow-sm w-full max-w-2xl">
             <!-- Modal Header -->
             <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-600">

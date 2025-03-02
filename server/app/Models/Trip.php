@@ -36,9 +36,22 @@ class Trip extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function activities(): HasMany
+    
+
+    public function destinations()
     {
-        return $this->hasMany(Activity::class);
+        return $this->hasMany(Destination::class);
     }
 
-} 
+
+    public function participants()
+    {
+        return $this->hasMany(TripParticipant::class);
+    }
+
+    public function expenses()
+    {
+        return $this->hasMany(Expense::class);
+    }
+}
+

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('trip_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('role')->default('participant'); // owner, participant
-            $table->string('status')->default('pending'); // pending, accepted, declined, 
+            $table->string('status')->default('pending'); // pending, accepted, declined, invited, rejected
             $invitedBy = $table->foreignId('invited_by')->nullable()->constrained('users')->nullOnDelete();
             $table->boolean('can_edit')->default(false);
             $table->timestamps();

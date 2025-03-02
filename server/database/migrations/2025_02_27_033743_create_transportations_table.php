@@ -13,10 +13,19 @@ return new class extends Migration
     {
         Schema::create('transportations', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('destination_id')->constrained('destinations')->onDelete('cascade');
+            $table->string('type'); 
+            $table->string('departure_location')->nullable();
+            $table->string('arrival_location')->nullable();
+            $table->dateTime('departure_time')->nullable();
+            $table->dateTime('arrival_time')->nullable();
+            $table->string('company')->nullable();
+            $table->string('booking_reference')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }
-
+// flight, train, bus, taxi, bike, car, motorcycle, boat, subway, tram, helicopter
     /**
      * Reverse the migrations.
      */

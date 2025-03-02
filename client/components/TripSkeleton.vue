@@ -1,6 +1,6 @@
 <template>
     <div class="bg-gray-100 p-8 capitalize">
-        <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
+        <div class=" mx-auto bg-white rounded-lg shadow-lg p-8">
 
             <!-- Trip Title -->
             <div class="flex justify-between items-center mb-4 animate-pulse">

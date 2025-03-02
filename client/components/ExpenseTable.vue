@@ -65,7 +65,7 @@
 import { computed } from 'vue';
 
 const props = defineProps({
-    expenses: {
+    exps: {
         type: Array,
         required: true,
         default: () => []
