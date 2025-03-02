@@ -9,7 +9,7 @@
             </button>
         </div>
         <div class="bg-gray-50 p-3 rounded-lg">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid my-grid-400 gap-4">
 
                 <div v-for="participant in participants?.filter(participant => (participant.status !== 'rejected' && useUser?.user?.id !== participant.user_id)) || []"
                     :key="participant.id" class="bg-white p-4 rounded-lg shadow-sm">

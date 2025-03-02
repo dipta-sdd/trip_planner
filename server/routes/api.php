@@ -6,6 +6,7 @@ use App\Http\Controllers\TripController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\AdminController;
 
 
 // Auth routes
@@ -60,5 +61,17 @@ Route::middleware('auth:api')->group(function () {
     Route::post('trips/{trip}/expenses', [ExpenseController::class, 'store']);
     Route::put('trips/{trip}/expenses/{expense}', [ExpenseController::class, 'update']);
     Route::delete('trips/{trip}/expenses/{expense}', [ExpenseController::class, 'destroy']);
+
+
+
     
 });
+
+
+    // admin routes
+    // later add middleware to check if user is admin
+    Route::get('admin/trips', [AdminController::class, 'trips']);
+    Route::get('admin/trips/{id}', [AdminController::class, 'trip']);
+    Route::put('admin/trips/{id}', [AdminController::class, 'update']);
+    Route::delete('admin/trips/{id}', [AdminController::class, 'destroy']);
+    Route::get('admin/users', [AdminController::class, 'users']);

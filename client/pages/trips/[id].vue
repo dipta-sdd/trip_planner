@@ -1,7 +1,7 @@
 <template>
   <TripSkeleton v-if="loading" />
   <div v-else class="bg-gray-100 p-4 capitalize">
-    <div class=" mx-auto bg-white rounded-lg shadow-lg p-4">
+    <div class="max-w-7xl mx-auto bg-white rounded-lg shadow-lg p-4">
       <!-- Trip Title -->
       <div class="flex justify-between items-center mb-4">
         <h1 class="text-3xl font-bold text-gray-800">{{ trip?.title }}</h1>
@@ -81,7 +81,7 @@
       <div class="mb-2">
         <div class="flex justify-between items-center mb-2">
           <h2 class="text-xl font-semibold text-gray-700">Destinations</h2>
-          <button v-if="isAdmin" class=" cursor-pointer bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
+          <button v-if="isAdmin" class=" cursor-pointer bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg"
             @click="desModal = true">Add
             Destination</button>
           <DestinationManager v-if="desModal" :tripId="trip?.id" @close="clearDes"
@@ -99,7 +99,7 @@
         <div class="space-y-6">
           <!-- Destination -->
           <div v-if="trip?.destinations?.length" v-for="destination in trip?.destinations || []"
-            class="bg-gray-50 p-4 rounded-lg relative">
+            class=" p-4 rounded-lg relative border border-gray-300  mb-4">
             <h3 class="text-lg font-medium text-gray-700 mb-2">{{ destination?.name }}</h3>
             <p class="text-gray-600"><span class="font-medium">Arrival:</span> {{ formatDate(destination?.arrival_date)
               }} </p>
@@ -125,7 +125,7 @@
                 </button>
 
               </h4>
-              <div class="space-y-2">
+              <div class="space-y-2 my-grid-600 gap-4">
                 <div v-if="destination?.activities?.length" v-for="activity in destination.activities || []"
                   :key="activity.id" class="bg-blue-50 p-3 rounded-lg shadow-sm relative">
                   <!-- edit button for admin -->
@@ -290,7 +290,7 @@
                 </button>
 
               </h4>
-              <div class="space-y-2">
+              <div class="space-y-2 my-grid-600 gap-4">
                 <div v-if="destination?.accommodations?.length"
                   v-for="accommodation in destination?.accommodations || []" :key="accommodation.id"
                   class="bg-green-100 text-gray-600 p-3 rounded-lg shadow-lg space-y-1 relative">
@@ -356,7 +356,7 @@
                 </button>
 
               </h4>
-              <div class="space-y-2">
+              <div class="space-y-2 my-grid-600 gap-4">
                 <div v-if="destination?.transportations?.length"
                   v-for="transportation in destination?.transportations || []" :key="transportation.id"
                   class="bg-green-100 text-gray-600 p-3 rounded-lg shadow-lg space-y-1 relative">
