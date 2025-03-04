@@ -26,10 +26,11 @@
               class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" />
           </div>
         </div>
+        <p v-if="error" class="text-red-500 text-sm">{{ error }}</p>
 
         <div>
           <button type="submit"
-            class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+            class="cursor-pointer flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
             Sign in
           </button>
         </div>
@@ -51,6 +52,7 @@ const token = useCookie('token');
 const userStore = useUserStore();
 const email = ref('');
 const password = ref('');
+const error = ref(null);
 const handleLogin = async (event) => {
 
   try {
@@ -76,9 +78,11 @@ const handleLogin = async (event) => {
       console.log('login successful');
     }else{
       console.log(data);
+      error.value = 'Invalid Credentials';
     }
   } catch (error) {
     console.log(error);
+    error.value = 'Invalid Credentials';
   }
 }
 </script>

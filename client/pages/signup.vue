@@ -27,7 +27,7 @@
             placeholder="Name" required>
 
         </div>
-        <small v-if="errors?.name" class="text-red-500">{{ errors?.name[0] }}"</small>
+        <small v-if="errors?.name" class="text-red-500">{{ errors?.name[0] }}</small>
 
         <label for="email-address-icon" class="block my-2 text-sm font-medium text-gray-900 dark:text-white">Your
           Email</label>
@@ -44,7 +44,7 @@
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="name@flowbite.com">
         </div>
-        <small v-if="errors?.email" class="text-red-500">{{ errors?.email[0] }}"</small>
+        <small v-if="errors?.email" class="text-red-500">{{ errors?.email[0] }}</small>
 
         <label for="password" class="block my-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
         <div class="relative">
@@ -62,7 +62,7 @@
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Password" required>
         </div>
-        <small v-if="errors?.password" class="text-red-500">{{ errors?.password[0] }}"</small>
+        <small v-if="errors?.password" class="text-red-500">{{ errors?.password[0] }}</small>
 
 
         <label for="confirm-password" class="block my-2 text-sm font-medium text-gray-900 dark:text-white">Confirm
@@ -82,7 +82,7 @@
         </div>
 
         <button type="submit"
-          class="mt-4 bg-indigo-600 dark:bg-indigo-600 text-white hover:bg-indigo-700 dark:hover:bg-indigo-700 px-4 py-2 rounded-md text-sm font-medium">
+          class=" cursor-pointer mt-4 bg-indigo-600 dark:bg-indigo-600 text-white hover:bg-indigo-700 dark:hover:bg-indigo-700 px-4 py-2 rounded-md text-sm font-medium">
           Sign Up
         </button>
       </form>
