@@ -85,6 +85,10 @@ const props = defineProps({
     limit: {
         type: Number,
         default: 5
+    },
+    userId: {
+        type: Number,
+        default: null
     }
 })
 const tripsIsLoading = ref(true);
@@ -131,9 +135,10 @@ onMounted(() => {
     fetchTrips();
 })
 const fetchTrips = async () => {
+    console.log(props.userId);
     try {
         tripsIsLoading.value = true;
-        const data = await $fetch('http://localhost:8000/api/admin/trips', {
+        const data = await $fetch(`http://localhost:8000/api/admin${ props.userId ? `/users/${props.userId}` : '' }/trips`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

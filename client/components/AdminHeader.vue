@@ -1,7 +1,7 @@
 <template>
     <header class="bg-white shadow">
         <div class="px-6 py-4 flex justify-between items-center">
-            <h1 class="text-xl font-semibold">Dashboard</h1>
+            <h1 class="text-xl font-semibold">{{ title }}</h1>
             <div class="flex items-center">
                 <input type="text" placeholder="Search..." class="px-4 py-2 border rounded-lg focus:outline-none">
                 <button class="ml-4 p-2 text-gray-600 hover:text-gray-900">
@@ -17,5 +17,11 @@
     </header>
 </template>
 <script setup>
-
+ const props =   defineProps({
+        title: {
+            type: String,
+            default: 'Dashboard'
+        }
+    })
+    
 </script>

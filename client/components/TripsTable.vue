@@ -62,7 +62,7 @@
                     </td>
                 </tr>
                 <tr v-if="trips.length === 0">
-                    <td colspan="5" class="px-4 py-4 text-center text-gray-500">No expenses recorded yet</td>
+                    <td colspan="9" class="px-4 py-4 text-center text-gray-500">No Trips Found.</td>
                 </tr>
             </tbody>
 

@@ -75,3 +75,5 @@ Route::middleware('auth:api')->group(function () {
     Route::put('admin/trips/{id}', [AdminController::class, 'update']);
     Route::delete('admin/trips/{id}', [AdminController::class, 'destroy']);
     Route::get('admin/users', [AdminController::class, 'users']);
+    Route::get('admin/users/{id}', [AdminController::class, 'user']);
+    Route::get('admin/users/{id}/trips', [AdminController::class, 'userTrips']);
