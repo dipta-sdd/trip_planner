@@ -1,7 +1,7 @@
 <template>
     <div class="flex-1 flex flex-col overflow-hidden">
         <!-- Top Navigation -->
-        <AdminHeader :title="`User`" />
+        <AdminHeader title="User Details" />
 
         <main class="flex-1 bg-gray-100 overflow-y-auto p-6">
             <!-- user Details -->

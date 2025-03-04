@@ -72,7 +72,12 @@
         <!-- Budget -->
         <div>
           <h3 class="text-sm font-semibold text-gray-500">Budget</h3>
-          <p class="text-gray-800">$ {{ trip?.budget }}</p>
+          <p class="text-gray-800 inline-flex items-center gap-3">$ {{ trip?.budget }}
+            <span v-if="totalExpenses > 0"
+              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-blue-100 text-blue-900"> ALready Used
+            {{ totalExpenses }}$
+            </span>
+          </p>
         </div>
       </div>
 
@@ -832,4 +837,8 @@ const cancelRequest = async () => {
     console.error('Join request failed:', error);
   }
 }
+const totalExpenses = computed(() => {
+  return trip.value?.expenses?.reduce((sum, expense) => sum + parseFloat(expense.amount), 0);
+});
+
 </script>

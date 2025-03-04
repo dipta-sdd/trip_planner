@@ -16,13 +16,13 @@
         <div class="flex items-center space-x-4">
 
 
-          
+
 
           <NuxtLink href="/" class="py-2 px-4 text-gray-700 hover:text-blue-600 font-medium">Home</NuxtLink>
           <NuxtLink href="/trips" class="py-2 px-4 text-gray-700 hover:text-blue-600 font-medium">Trips</NuxtLink>
           <div v-if="useUserStore()?.user" class="relative group">
             <button class="py-2 px-4 text-gray-700 hover:text-blue-600 font-medium">
-              Profile
+              {{userStore.user?.name || 'Profile'}}
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block ml-1" viewBox="0 0 20 20"
                 fill="currentColor">
                 <path fill-rule="evenodd"
@@ -32,15 +32,21 @@
             </button>
             <div
               class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-              <NuxtLink href="/trips/my-trips" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">My Trips</NuxtLink>
+              <NuxtLink v-if="userStore.user?.role == 'admin'" href="/admin"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">
+                Dashboard</NuxtLink>
+              <NuxtLink href="/trips/my-trips" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">My Trips
+              </NuxtLink>
               <NuxtLink href="/create-trip" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">New Trip
               </NuxtLink>
               <button @click="logout" href="#"
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">Logout</button>
             </div>
           </div>
-          <NuxtLink href="/login" v-if="!useUserStore()?.user" class="py-2 px-4 text-gray-700 hover:text-blue-600 font-medium">Login</NuxtLink>
-          <NuxtLink href="/signup" v-if="!useUserStore()?.user" class="py-2 px-4 text-gray-700 hover:text-blue-600 font-medium">Signup</NuxtLink>
+          <NuxtLink href="/login" v-if="!useUserStore()?.user"
+            class="py-2 px-4 text-gray-700 hover:text-blue-600 font-medium">Login</NuxtLink>
+          <NuxtLink href="/signup" v-if="!useUserStore()?.user"
+            class="py-2 px-4 text-gray-700 hover:text-blue-600 font-medium">Signup</NuxtLink>
         </div>
 
 
@@ -55,7 +61,6 @@
 </template>
 
   <script setup>
-    const open = ref(false);
     const userStore = useUserStore();
     const token = useCookie('token');
     const logout = () => {
@@ -64,9 +69,6 @@
       navigateTo('/login');
     }
 
-    const toggleDropdown = () => {
-      open.value = !open.value
-    }
   </script>
   
   

@@ -112,6 +112,14 @@ class TripController extends Controller
                 $expenses = DB::table('expenses')->selectRaw('expenses.*, users.name as name')
                 ->join('users', 'expenses.created_by', '=', 'users.id')->where('trip_id', $trip->id)->get();
                 $trip->expenses = $expenses;
+                $expense_stat_cat = Expense::selectRaw('category, sum(amount) as amount')
+                    ->where('trip_id', $trip->id)->groupBy('category')->get();
+                $trip->expense_stat_cat = $expense_stat_cat;
+                $expense_stat_date = Expense::selectRaw('date, sum(amount) as amount')
+                    ->where('trip_id', $trip->id)->groupBy('date')->get();
+                $trip->expense_stat_date = $expense_stat_date;
+
+                $trip->total_expenses = Expense::where('trip_id', $trip->id)->sum('amount');
             }
             
         }
@@ -131,9 +139,37 @@ class TripController extends Controller
     }
 
     public function index(Request $req){
+        $sort = $req->query('sort');
+        $order_by = $sort ? explode('-', $sort)[0] : 'start_date';
+        $sortDirection = $sort ? explode('-', $sort)[1] : 'asc';
         $user = Auth::guard('api')->user();
         if ($user) {
-            $trips = DB::table(DB::raw('(select trips.* , count(participants.id) as participant_count from trips left join participants on (trips.id = participants.trip_id and participants.status = "accepted") group by trips.id) as trips left join participants on ( trips.id = participants.trip_id and participants.user_id = '.$user->id.' )'))->selectRaw('trips.*, participants.status as participant_status');
+            $trips = DB::table(DB::raw('(select trips.* , count(participants.id) as participant_count ,
+            IF(p.status = "accepted", 
+                IF(p.role = "owner",
+                    "owner",
+                    IF(p.can_edit, "admin", "participant") 
+                ),
+                IF(p.status = "invited",
+                    "invited",
+                    IF(p.status = "pending",
+                        "requested",
+                        IF(p.status = "declined",
+                            "declined", 
+                            IF(p.status = "rejected",
+                                "invited",
+                                "can_join"
+                            )
+                        ) 
+                    )
+                )
+            ) as participant_status
+
+            from trips 
+            left join participants on (trips.id = participants.trip_id and participants.status = "accepted")
+            left join participants as p 
+                on (trips.id = p.trip_id and p.user_id = '.$user->id.')
+            group by trips.id) as trips left join participants on ( trips.id = participants.trip_id and participants.user_id = '.$user->id.' )'))->selectRaw('trips.*');
         }else{
             $trips = DB::table(DB::raw('(select trips.* , count(participants.id) as participant_count from trips left join participants on (trips.id = participants.trip_id and participants.status = "accepted")  group by trips.id) as trips'))->selectRaw('trips.*');
         }
@@ -147,17 +183,49 @@ class TripController extends Controller
         if($req->query('end_date')){
             $trips = $trips->whereRaw(' trips.end_date <= "'. $req->query('end_date') .'"');
         }
-        $trips = $trips->orderBy('start_date', 'desc');
+        $trips = $trips->orderBy($order_by, $sortDirection);
         $trips = $trips->get();
         return response()->json($trips);
     }
     
     public function mytrips(Request $req){
+        $sort = $req->query('sort');
+        $order_by = $sort ? explode('-', $sort)[0] : 'start_date';
+        $sortDirection = $sort ? explode('-', $sort)[1] : 'asc';
         $user = Auth::guard('api')->user();
        
-        $trips = DB::table(DB::raw('(select trips.* , count(participants.id) as participant_count from trips left join participants on (trips.id = participants.trip_id and participants.status = "accepted") group by trips.id) as trips join participants on ( trips.id = participants.trip_id and participants.user_id = '.$user->id.' )'))->selectRaw('trips.*, participants.status as participant_status, participants.can_edit');
+        $trips = DB::table(DB::raw('(select trips.* , count(participants.id) as participant_count ,
+            IF(p.status = "accepted", 
+                IF(p.role = "owner",
+                    "owner",
+                    IF(p.can_edit, "admin", "participant") 
+                ),
+                IF(p.status = "invited",
+                    "invited",
+                    IF(p.status = "pending",
+                        "requested",
+                        IF(p.status = "declined",
+                            "declined", 
+                            IF(p.status = "rejected",
+                                "invited",
+                                "can_join"
+                            )
+                        ) 
+                    )
+                )
+            ) as participant_status
+
+            from trips 
+            left join participants on (trips.id = participants.trip_id and participants.status = "accepted")
+            join participants as p 
+                on (trips.id = p.trip_id and p.user_id = '.$user->id.')
+            group by trips.id) as trips '))->selectRaw('trips.*');
         if($req->query('status')){
-            $trips = $trips->whereRaw('trips.status = "'. $req->query('status') .'"');
+            if(in_array($req->query('status'), ['planning', 'completed', 'canceled'])){
+                $trips = $trips->whereRaw('trips.status = "'. $req->query('status') .'"');
+            } else {
+                $trips = $trips->whereRaw('trips.participant_status = "'. $req->query('status') .'"');
+            }
         }
         if($req->query('start_date')){
             // dd($req->query('start_date'));
@@ -167,9 +235,19 @@ class TripController extends Controller
             $trips = $trips->whereRaw(' trips.end_date <= "'. $req->query('end_date') .'"');
         }
         
-        $trips = $trips->get();
+        $trips = $trips->orderBy($order_by, $sortDirection)->get();
+
+        $invites = DB::table(DB::raw('( select 
+            t.id as trip_id, t.title as trip_name, p.id, p.user_id , p.invited_by, u.name as invited_by_name, p.created_at as invited_at
+            from participants as p 
+            join trips as t on (p.trip_id = t.id and p.status = "planning") 
+            join users as u on p.invited_by = u.id
+            where p.status = "invited" and p.user_id = '.$user->id.' 
+            ) as i'))->get();
+
+
         
-        return response()->json($trips);
+        return response()->json(['trips' => $trips, 'invites' => $invites]);
     }
 
 

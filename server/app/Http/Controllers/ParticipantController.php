@@ -27,6 +27,7 @@ class ParticipantController extends Controller
                 'role' => 'participant',
                 'status' => 'invited',
                 'can_edit' => false,
+                'invited_by' => $user->id
             ]);
             return response()->json($participant, 201);
         }

@@ -72,17 +72,9 @@
                   <path d="M5 12h14"></path>
                   <path d="m12 5 7 7-7 7"></path>
                 </svg>
-                <span>Organize activities by day and time</span>
+                <span>Organize destinations by day and time</span>
               </li>
-              <li class="flex items-start gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="h-4 w-4 text-blue-600 mt-1">
-                  <path d="M5 12h14"></path>
-                  <path d="m12 5 7 7-7 7"></path>
-                </svg>
-                <span>Set reminders for important events</span>
-              </li>
+              
 
             </ul>
           </div>
@@ -100,7 +92,7 @@
             </svg>
             <h3 class="text-2xl font-semibold mb-2">Collaboration</h3>
             <p class="text-gray-600 mb-4">
-              Invite friends and family to plan together with real-time updates.
+              Invite friends and family to plan together.
             </p>
             <ul class="space-y-2 text-sm">
               <li class="flex items-start gap-2">
@@ -110,26 +102,9 @@
                   <path d="M5 12h14"></path>
                   <path d="m12 5 7 7-7 7"></path>
                 </svg>
-                <span>Send invitations via email</span>
+                <span>Invite friends and family</span>
               </li>
-              <li class="flex items-start gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="h-4 w-4 text-blue-600 mt-1">
-                  <path d="M5 12h14"></path>
-                  <path d="m12 5 7 7-7 7"></path>
-                </svg>
-                <span>Assign tasks to specific trip members</span>
-              </li>
-              <li class="flex items-start gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="h-4 w-4 text-blue-600 mt-1">
-                  <path d="M5 12h14"></path>
-                  <path d="m12 5 7 7-7 7"></path>
-                </svg>
-                <span>Comment and discuss plans in real-time</span>
-              </li>
+              
             </ul>
           </div>
         </div>
@@ -154,26 +129,10 @@
                   <path d="M5 12h14"></path>
                   <path d="m12 5 7 7-7 7"></path>
                 </svg>
-                <span>Set overall trip budget and category limits</span>
+                <span>Set overall spending by category</span>
               </li>
-              <li class="flex items-start gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="h-4 w-4 text-blue-600 mt-1">
-                  <path d="M5 12h14"></path>
-                  <path d="m12 5 7 7-7 7"></path>
-                </svg>
-                <span>Track expenses in multiple currencies</span>
-              </li>
-              <li class="flex items-start gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="h-4 w-4 text-blue-600 mt-1">
-                  <path d="M5 12h14"></path>
-                  <path d="m12 5 7 7-7 7"></path>
-                </svg>
-                <span>Split costs among trip participants</span>
-              </li>
+              
+             
             </ul>
           </div>
         </div>
@@ -210,15 +169,7 @@
                 </svg>
                 <span>Store confirmation numbers and tickets</span>
               </li>
-              <li class="flex items-start gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="h-4 w-4 text-blue-600 mt-1">
-                  <path d="M5 12h14"></path>
-                  <path d="m12 5 7 7-7 7"></path>
-                </svg>
-                <span>Get notifications about schedule changes</span>
-              </li>
+             
             </ul>
           </div>
         </div>

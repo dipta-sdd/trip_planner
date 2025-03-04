@@ -14,6 +14,7 @@ class Participant extends Model
         'role',
         'status',
         'can_edit',
+        'invited_by'
     ];
 
 }

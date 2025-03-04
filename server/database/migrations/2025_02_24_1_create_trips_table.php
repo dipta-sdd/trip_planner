@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('status')->default('planning'); // planning, ongoing, completed, cancelled
             $table->boolean('is_public')->default(true);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

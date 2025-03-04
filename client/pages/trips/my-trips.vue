@@ -2,19 +2,47 @@
 
     <div class="min-h-screen bg-gray-50 p-2">
         <div class="max-w-4xl mx-auto">
+            <h1 class="text-2xl font-bold text-gray-800 mb-2">Invites</h1>
+            <div class="bg-white p-0 rounded-lg shadow-md mb-4">
+                <ul class="divide-y divide-gray-300">
+                    <li v-if="invites?.length" v-for="invite in invites" :key="invite.id" class="py-0">
+                        <NuxtLink :to="'/trips/' + invite.trip_id"
+                            class="flex justify-between items-center py-4 px-2 hover:bg-gray-100">
+                            <p class="text-sm font-medium text-gray-700">
+                                {{ invite?.invited_by_name }} has invited you to trip,
+                                <span class="font-bold">{{ invite.trip_name }}</span>
+                            </p>
+                            <p class="text-xs text-gray-500"> {{ invite?.invited_at }}</p>
+                        </NuxtLink>
+                    </li>
+                    <li v-else class="py-4 px-2 text-sm font-medium text-gray-700">Currently you dont have any
+                        invitations.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-4xl mx-auto">
             <h1 class="text-2xl font-bold text-gray-800 mb-2">My Trips</h1>
             <div class="bg-white p-4 rounded-lg shadow-md mb-4">
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <!-- Status Filter -->
                     <div>
                         <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                        <select  v-model="filter.status" id="status"
+                        <select v-model="filter.status" id="status"
                             class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md">
                             <option value="">All</option>
                             <option value="planning">Planning</option>
                             <option value="completed">Completed</option>
+                            <option value="canceled">Canceled</option>
                             <option value="declined">Declined</option>
+                            <option value="invited">Invited</option>
+                            <option value="owner">Owner</option>
+                            <option value="admin">Admin</option>
+                            <option value="participant">Participant</option>
+                            <option value="requested">Requested</option>
+                            <option value="declined">Declined</option>
+                            <!-- <option value="can_join">Can Join</option> -->
+
                         </select>
                     </div>
 
@@ -29,6 +57,18 @@
                         <label for="end_date" class="block text-sm font-medium text-gray-700">End Date</label>
                         <input type="date" id="end_date" v-model="filter.end_date"
                             class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md" />
+                    </div>
+                    <div>
+                        <label for="sort" class="block text-sm font-medium text-gray-700">Sort By</label>
+                        <select v-model="filter.sort" id="sort"
+                            class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md">
+                            <option value="start_date-desc">Start Date N-O</option>
+                            <option value="start_date-asc">Start Date O-N</option>
+                            <option value="end_date-desc">End Date N-O</option>
+                            <option value="end_date-asc">End Date O-N</option>
+                            <option value="budget-desc">Budget High-Small</option>
+                            <option value="budget-asc">Budget Small-High</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -50,26 +90,49 @@
                 </div>
             </div>
             <div v-else class="space-y-2">
-                <div v-for="trip in trips" :key="trip.id"
+                <div v-if="trips?.length" v-for="trip in trips" :key="trip.id"
                     class="bg-white rounded-lg p-4 shadow-sm border border-gray-200 hover:border-blue-100 transition-colors capitalize">
                     <!-- Header Section -->
                     <div class="flex justify-between items-start mb-3">
 
-                        <h2 class="text-lg font-semibold text-gray-800 mb-2 cursor-pointer"
+                        <h2 class="text-lg font-semibold text-blue-500 hover:text-blue-600 mb-2 cursor-pointer"
                             @click="navigateTo(`/trips/${trip.id}`)">
                             {{ trip.title }}
                         </h2>
-                        <button v-if="trip.can_edit" @click="navigateTo(`/trips/${trip.id}`)"
-                            class="text-sm px-3 py-1.5 rounded-md bg-blue-500 text-white hover:bg-blue-600">Manage</button>
-                        <span v-else-if="trip.hasRequested || trip.isJoining" class="text-sm px-3 py-1.5 rounded-md"
-                            :class="trip.participant_status === 'pending' ? 'bg-blue-200 text-blue-950' : trip.participant_status === 'accepted' ? 'bg-green-200 text-green-950' :'bg-red-200 text-red-950'">
-                            {{ trip.participant_status === 'accepted' ? 'Joined' : trip.participant_status }}
-                        </span>
-                        <button v-else @click="joinTrip(trip)" :disabled="trip.status !== 'planning'"
-                            class="text-sm px-3 py-1.5 rounded-md bg-blue-500 text-white hover:bg-blue-600"
-                            :class="trip?.status !== 'planning' ? 'opacity-50 cursor-not-allowed' : ''">
+                        <button v-if="trip?.participant_status == 'can_join' && trip.status === 'planning'"
+                            @click="joinTrip(trip)"
+                            class="cursor-pointer text-sm px-3 py-1.5 rounded-md bg-blue-500 text-white hover:bg-blue-600">
                             Join
                         </button>
+                        <button v-if="trip?.participant_status == 'can_join' && trip.status !== 'planning'"
+                            @click="navigateToTrip(trip.id)"
+                            class="cursor-text text-sm px-3 py-1.5 rounded-md bg-blue-400 text-white">
+                            Join
+                        </button>
+                        <button v-else-if="trip?.participant_status == 'owner'" @click="navigateToTrip(trip.id)"
+                            class="cursor-pointer text-sm px-3 py-1.5 rounded-md bg-green-500 text-white hover:bg-green-600">
+                            Manage
+                        </button>
+                        <button v-else-if="trip?.participant_status == 'admin'" @click="navigateToTrip(trip.id)"
+                            class="cursor-pointer text-sm px-3 py-1.5 rounded-md bg-green-500 text-white hover:bg-green-600">
+                            Admin
+                        </button>
+                        <span v-else-if="trip?.participant_status == 'participant'" @click="navigateToTrip(trip.id)"
+                            class="text-sm px-3 py-1.5 rounded-md bg-green-500 text-white">
+                            Participant
+                        </span>
+                        <span v-else-if="trip?.participant_status == 'requested'" @click="navigateToTrip(trip.id)"
+                            class="text-sm px-3 py-1.5 rounded-md bg-orange-500 text-white">
+                            Pending
+                        </span>
+                        <span v-else-if="trip?.participant_status == 'declined'" @click="navigateToTrip(trip.id)"
+                            class="text-sm px-3 py-1.5 rounded-md bg-red-500 text-white">
+                            Declined
+                        </span>
+                        <span v-else-if="trip?.participant_status == 'invited'" @click="navigateToTrip(trip.id)"
+                            class="text-sm px-3 py-1.5 rounded-md bg-cyan-500 text-white">
+                            Invited
+                        </span>
 
                     </div>
 
@@ -130,6 +193,9 @@
 
                     </div>
                 </div>
+                <div v-else class="flex items-center justify-center">
+                    <p class="text-gray-600">No trips found.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -139,11 +205,13 @@
 
 
 const trips = ref([]);
+const invites = ref([]);
 const loading = ref(true);
 const filter = ref({
     status: '',
     start_date: null,
-    end_date: null
+    end_date: null,
+    sort: 'start_date-desc'
 });
 watch(filter.value, () => {
     fetchTrips();
@@ -162,11 +230,12 @@ const fetchTrips = async () => {
             },
             params: filter.value
         });
-        trips.value = data.map(trip => ({
+        trips.value = data.trips.map(trip => ({
             ...trip,
             isJoining: trip.participant_status === 'accepted',
             hasRequested: trip.participant_status === 'pending' || trip.participant_status === 'declined'
         }));
+        invites.value = data.invites;
         loading.value = false;
     } catch (error) {
         console.error('Error fetching trips:', error);
