@@ -7,6 +7,7 @@ use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\AdminController;
+use App\Http\Middleware\adminMiddleware;
 
 
 // Auth routes
@@ -68,12 +69,12 @@ Route::middleware('auth:api')->group(function () {
 });
 
 
-    // admin routes
-    // later add middleware to check if user is admin
-    Route::get('admin/trips', [AdminController::class, 'trips']);
-    Route::get('admin/trips/{id}', [AdminController::class, 'trip']);
-    Route::put('admin/trips/{id}', [AdminController::class, 'update']);
-    Route::delete('admin/trips/{id}', [AdminController::class, 'destroy']);
-    Route::get('admin/users', [AdminController::class, 'users']);
-    Route::get('admin/users/{id}', [AdminController::class, 'user']);
-    Route::get('admin/users/{id}/trips', [AdminController::class, 'userTrips']);
+    Route::prefix('admin')->middleware(adminMiddleware::class)->group(function () {
+        Route::get('trips', [AdminController::class, 'trips']);
+        Route::get('trips/{id}', [AdminController::class, 'trip']);
+        Route::put('trips/{id}', [AdminController::class, 'update']);
+        Route::delete('trips/{id}', [AdminController::class, 'destroy']);
+        Route::get('users', [AdminController::class, 'users']);
+        Route::get('users/{id}', [AdminController::class, 'user']);
+        Route::get('users/{id}/trips', [AdminController::class, 'userTrips']);
+    });
