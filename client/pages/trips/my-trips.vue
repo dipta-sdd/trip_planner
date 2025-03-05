@@ -222,7 +222,7 @@ const fetchTrips = async () => {
         return navigateTo('/login');
     }
     try {
-        const data = await $fetch('http://localhost:8000/api/mytrips', {
+        const data = await $fetch('https://trip-planer-api.sankarsan.xyz/api/mytrips', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -250,7 +250,7 @@ const joinTrip = async (trip) => {
     }
     
     try {
-        const data = await $fetch(`http://localhost:8000/api/trips/${trip.id}/join`, {
+        const data = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${trip.id}/join`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

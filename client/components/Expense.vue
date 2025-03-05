@@ -207,7 +207,7 @@ const error = ref(null);
 
 const deleteExpense = async (id) => {
     try {
-        await $fetch(`http://localhost:8000/api/trips/${props.tripId}/expenses/${id}`, {
+        await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${props.tripId}/expenses/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -252,7 +252,7 @@ const handleSubmit = async () => {
     console.log('form');
     if(form.value.id){
         try {
-            const response = await $fetch(`http://localhost:8000/api/trips/${props.tripId}/expenses/${form.value.id}`, {
+            const response = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${props.tripId}/expenses/${form.value.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -273,7 +273,7 @@ const handleSubmit = async () => {
     }
     else{
         try {
-            const response = await $fetch(`http://localhost:8000/api/trips/${props.tripId}/expenses`, {
+            const response = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${props.tripId}/expenses`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

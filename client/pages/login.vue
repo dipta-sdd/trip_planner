@@ -56,7 +56,7 @@ const error = ref(null);
 const handleLogin = async (event) => {
 
   try {
-    const res = await fetch('http://localhost:8000/api/login', {
+    const res = await fetch('https://trip-planer-api.sankarsan.xyz/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

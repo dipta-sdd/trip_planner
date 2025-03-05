@@ -38,7 +38,7 @@ const submitForm = async () => {
     isPublic: isPublic.value
   })
   try {
-    const response = await fetch('http://localhost:8000/api/trips', {
+    const response = await fetch('https://trip-planer-api.sankarsan.xyz/api/trips', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

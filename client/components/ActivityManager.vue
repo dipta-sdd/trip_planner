@@ -154,7 +154,7 @@ const data = ref(props.act);
 
 const submit = async () => {
     try {
-        const res = await $fetch(`http://localhost:8000/api/trips/${props.tripId}/activities`, {
+        const res = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${props.tripId}/activities`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -179,7 +179,7 @@ const submit = async () => {
 
 const update = async () => {
     try {
-        const res = await $fetch(`http://localhost:8000/api/trips/${props.tripId}/activities/${data.value?.id}`, {
+        const res = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${props.tripId}/activities/${data.value?.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -200,7 +200,7 @@ const update = async () => {
 
 const destroy = async (id) => {
     try {
-        const res = await $fetch(`http://localhost:8000/api/trips/${props.tripId}/activities/${id}`, {
+        const res = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${props.tripId}/activities/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

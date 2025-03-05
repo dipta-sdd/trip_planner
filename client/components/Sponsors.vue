@@ -153,7 +153,7 @@ const clearSponsor = () => {
 
 const submitSponsor = async () => {
     try {
-        const data = await $fetch(`http://localhost:8000/api/trips/${props.tripId}/sponsor`, {
+        const data = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${props.tripId}/sponsor`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -181,7 +181,7 @@ const updateModal = (data) => {
 }
 const updateSponsor = async () => {
     try {
-        const data = await $fetch(`http://localhost:8000/api/trips/${props.tripId}/sponsor/${sponsor.value.id}`, {
+        const data = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${props.tripId}/sponsor/${sponsor.value.id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -204,7 +204,7 @@ const updateSponsor = async () => {
 
 const deleteSponsor = async (sponsor) => {
     try {
-        const data = await $fetch(`http://localhost:8000/api/trips/${props.tripId}/sponsor/${sponsor.id}`, {
+        const data = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${props.tripId}/sponsor/${sponsor.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
