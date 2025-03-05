@@ -74,8 +74,9 @@
           <h3 class="text-sm font-semibold text-gray-500">Budget</h3>
           <p class="text-gray-800 inline-flex items-center gap-3">$ {{ trip?.budget }}
             <span v-if="totalExpenses > 0"
-              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-blue-100 text-blue-900"> ALready Used
-            {{ totalExpenses }}$
+              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-blue-100 text-blue-900">
+              ALready Used
+              {{ totalExpenses }}$
             </span>
           </p>
         </div>
@@ -440,6 +441,8 @@
       <Participants v-if="trip?.is_participant || trip?.is_public" :isOwner="isOwner ? true : false"
         :participants="trip.participants" :tripId="trip.id" :isAdmin="isAdmin ? true : false"
         :suggestions="trip.suggested_participants" @update="(data) => { trip.participants = data }" />
+
+      <Comments @update="(data) => { trip.comments = [...trip.comments, ...data]; }" :tripId="trip.id" :comments="trip.comments" />
 
       <!-- expenses -->
       <Expense :expenses="trip.expenses" v-if="trip?.is_participant" :tripId="trip.id" :isAdmin="isAdmin ? true : false"

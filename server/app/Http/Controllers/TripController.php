@@ -120,6 +120,8 @@ class TripController extends Controller
                 $trip->expense_stat_date = $expense_stat_date;
 
                 $trip->total_expenses = Expense::where('trip_id', $trip->id)->sum('amount');
+                $comments = DB::table(DB::raw('(select comments.* , users.name from comments join users on comments.user_id = users.id ) as t'))->where('trip_id', $trip->id)->get();
+                $trip->comments = $comments;
             }
             
         }

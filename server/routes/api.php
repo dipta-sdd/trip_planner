@@ -7,6 +7,7 @@ use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CommentController;
 use App\Http\Middleware\adminMiddleware;
 
 
@@ -64,6 +65,9 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('trips/{trip}/expenses/{expense}', [ExpenseController::class, 'destroy']);
 
 
+    Route::post('/comments/{trip}', [CommentController::class, 'store']);
+
+    
 
     
 });
