@@ -315,7 +315,7 @@ const editActivity = (act) => {
 
 const deleteActivity = async (act) => {
   try {
-    const data = await $fetch(`http://localhost:8000/api/trips/${route.params.id}/activity/${activity.value.id}`, {
+    const data = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${route.params.id}/activity/${activity.value.id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -338,7 +338,7 @@ const submitActivity = async () => {
   }
   try {
     if (activity.value.id) {
-      const data = await $fetch(`http://localhost:8000/api/trips/${route.params.id}/activity/${activity.value.id}`, {
+      const data = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${route.params.id}/activity/${activity.value.id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -362,7 +362,7 @@ const submitActivity = async () => {
       }
 
     } else {
-      const data = await $fetch(`http://localhost:8000/api/trips/${route.params.id}/activity`, {
+      const data = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${route.params.id}/activity`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -406,7 +406,7 @@ const clearActivity = () => {
 }
 onMounted(async () => {
   try {
-    const data = await $fetch(`http://localhost:8000/api/trips/${route.params.id}`,
+    const data = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${route.params.id}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -459,7 +459,7 @@ const joinTrip = async () => {
   }
 
   try {
-    const data = await $fetch(`http://localhost:8000/api/trips/${trip.value.id}/join`, {
+    const data = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${trip.value.id}/join`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

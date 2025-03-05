@@ -108,7 +108,7 @@ const password_confirmation = ref('');
 const errors = ref(null);
 const handleSignup = async (event) => {
   try{
-    const response = await fetch('http://localhost:8000/api/register', {
+    const response = await fetch('https://trip-planer-api.sankarsan.xyz/api/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

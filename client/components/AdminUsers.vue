@@ -105,7 +105,7 @@ onMounted(() => {
 const fetchUsers = async () => {
     try {
         usersIsLoading.value = true;
-        const data = await $fetch('http://localhost:8000/api/admin/users', {
+        const data = await $fetch('https://trip-planer-api.sankarsan.xyz/api/admin/users', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

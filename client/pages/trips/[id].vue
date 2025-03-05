@@ -704,7 +704,7 @@ onMounted(async () => {
 const fetchTrip = async () => {
   try {
     loading.value = true;
-    const data = await $fetch(`http://localhost:8000/api/trips/${route.params.id}`,
+    const data = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${route.params.id}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -747,7 +747,7 @@ const joinTrip = async () => {
     return navigateTo('/login');
   }
   try {
-    const data = await $fetch(`http://localhost:8000/api/trips/${trip.value.id}/join`, {
+    const data = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${trip.value.id}/join`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -762,7 +762,7 @@ const joinTrip = async () => {
 
 const updateTrip = async () => {
   try {
-    const data = await $fetch(`http://localhost:8000/api/trips/${trip.value.id}`, {
+    const data = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${trip.value.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -784,7 +784,7 @@ const updateTrip = async () => {
 
 const destroyTrip = async () => {
   try {
-    const data = await $fetch(`http://localhost:8000/api/trips/${trip.value.id}`, {
+    const data = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${trip.value.id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -799,7 +799,7 @@ const destroyTrip = async () => {
 };
 const leaveTrip = async () => {
   try {
-    const data = await $fetch(`http://localhost:8000/api/trips/${trip.value.id}/leave`, {
+    const data = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${trip.value.id}/leave`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -813,7 +813,7 @@ const leaveTrip = async () => {
 }
 const acceptInvitation = async () => {
   try {
-    const data = await $fetch(`http://localhost:8000/api/trips/${trip.value.id}/accept`, {
+    const data = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${trip.value.id}/accept`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -828,7 +828,7 @@ const acceptInvitation = async () => {
 }
 const cancelRequest = async () => {
   try {
-    const data = await $fetch(`http://localhost:8000/api/trips/${trip.value.id}/cancel`, {
+    const data = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${trip.value.id}/cancel`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

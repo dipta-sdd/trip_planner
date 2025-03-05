@@ -154,7 +154,7 @@ const onUserSelect = async (user) => {
     console.log('User selected:', user);
     // invited.value.push(user);
     try {
-        const res = await $fetch(`http://localhost:8000/api/trips/${props.tripId}/participants/invite/${user.id}`, {
+        const res = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${props.tripId}/participants/invite/${user.id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -170,7 +170,7 @@ const onUserSelect = async (user) => {
 
 const cancelInvite = async (participantId) => {
     try {
-        const res = await $fetch(`http://localhost:8000/api/trips/participants/cancelInvite/${participantId}`, {
+        const res = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/participants/cancelInvite/${participantId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -186,7 +186,7 @@ const cancelInvite = async (participantId) => {
 
 const updates = async (participantId, status) => {
     try {
-        const res = await $fetch(`http://localhost:8000/api/trips/participants/update/${participantId}`, {
+        const res = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/participants/update/${participantId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -207,7 +207,7 @@ const updates = async (participantId, status) => {
 
 const removeAdmin = async (participantId) => {
     try {
-        const res = await $fetch(`http://localhost:8000/api/trips/participants/removeAdmin/${participantId}`, {
+        const res = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/participants/removeAdmin/${participantId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -227,7 +227,7 @@ const removeAdmin = async (participantId) => {
 
 const makeAdmin = async (participantId) => {
     try {
-        const res = await $fetch(`http://localhost:8000/api/trips/participants/makeAdmin/${participantId}`, {
+        const res = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/participants/makeAdmin/${participantId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -247,7 +247,7 @@ const makeAdmin = async (participantId) => {
 
 const remove = async (participantId) => {
     try {
-        const res = await $fetch(`http://localhost:8000/api/trips/participants/remove/${participantId}`, {
+        const res = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/participants/remove/${participantId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

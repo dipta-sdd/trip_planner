@@ -225,7 +225,7 @@ onMounted(() => {
 
 const submit = async () => {
     try {
-        const res = await $fetch(`http://localhost:8000/api/trips/${props.tripId}/transportations`, {
+        const res = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${props.tripId}/transportations`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -246,7 +246,7 @@ const submit = async () => {
 
 const update = async () => {
     try {
-        const res = await $fetch(`http://localhost:8000/api/trips/${props.tripId}/transportations/${data.value?.id}`, {
+        const res = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${props.tripId}/transportations/${data.value?.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -267,7 +267,7 @@ const update = async () => {
 
 const destroy = async (id) => {
     try {
-        const res = await $fetch(`http://localhost:8000/api/trips/${props.tripId}/transportations/${id}`, {
+        const res = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${props.tripId}/transportations/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

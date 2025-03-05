@@ -8,7 +8,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   if (token) {
     // console.log(token);
     try {
-      const response = await fetch("http://localhost:8000/api/me", {
+      const response = await fetch("https://trip-planer-api.sankarsan.xyz/api/me", {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

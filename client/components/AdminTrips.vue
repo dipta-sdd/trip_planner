@@ -138,7 +138,7 @@ const fetchTrips = async () => {
     console.log(props.userId);
     try {
         tripsIsLoading.value = true;
-        const data = await $fetch(`http://localhost:8000/api/admin${ props.userId ? `/users/${props.userId}` : '' }/trips`, {
+        const data = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/admin${ props.userId ? `/users/${props.userId}` : '' }/trips`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

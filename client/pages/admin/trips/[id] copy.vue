@@ -425,7 +425,7 @@ const route = useRoute();
 const id = route.params.id;
 const getTrip = async () => {
     try {
-        const response = await $fetch(`http://localhost:8000/api/admin/trips/${id}`, {
+        const response = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/admin/trips/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -485,7 +485,7 @@ const calculateTotalExpenses = () => {
 
 const updateTrip = async () => {
     try {
-        const data = await $fetch(`http://localhost:8000/api/admin/trips/${trip.value.id}`, {
+        const data = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/admin/trips/${trip.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -507,7 +507,7 @@ const updateTrip = async () => {
 
 const destroyTrip = async () => {
     try {
-        const data = await $fetch(`http://localhost:8000/api/admin/trips/${trip.value.id}`, {
+        const data = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/admin/trips/${trip.value.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

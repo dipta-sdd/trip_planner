@@ -92,7 +92,7 @@ const errors = ref({});
 const error = ref('');
 const handleSubmit = async () => {
     try {
-        const data = await $fetch(`http://localhost:8000/api/trips/${props.tripId}/expense`, {
+        const data = await $fetch(`https://trip-planer-api.sankarsan.xyz/api/trips/${props.tripId}/expense`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

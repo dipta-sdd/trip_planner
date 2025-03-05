@@ -75,7 +75,7 @@ const handleReply = (comment) => {
 }
 const handleAddComment = async () => {
     try{
-        const response = await $fetch('http://localhost:8000/api/comments/'+props.tripId, {
+        const response = await $fetch('https://trip-planer-api.sankarsan.xyz/api/comments/'+props.tripId, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
